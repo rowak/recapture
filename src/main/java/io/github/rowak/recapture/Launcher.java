@@ -140,7 +140,7 @@ public class Launcher extends JFrame {
 	}
 	
 	private LauncherInfo getLauncherInfo() {
-		return new LauncherInfo(captureArea, getMonitorBounds(getSourceMonitor()),
+		return new LauncherInfo(captureArea, getMonitorBounds(getDestinationMonitor()),
 				getQuality(), getFrequency());
 	}
 	

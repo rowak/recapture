@@ -6,9 +6,9 @@ public class LauncherInfo {
 	private Rectangle captureArea;
 	private Rectangle displayBounds;
 	private int quality;
-	private int frequency;
+	private long frequency;
 	
-	public LauncherInfo(Rectangle captureArea, Rectangle displayBounds, int quality, int frequency) {
+	public LauncherInfo(Rectangle captureArea, Rectangle displayBounds, int quality, long frequency) {
 		this.captureArea = captureArea;
 		this.displayBounds = displayBounds;
 		this.quality = quality;
@@ -27,7 +27,7 @@ public class LauncherInfo {
 		return quality;
 	}
 	
-	public int getFrequency() {
+	public long getFrequency() {
 		return frequency;
 	}
 }

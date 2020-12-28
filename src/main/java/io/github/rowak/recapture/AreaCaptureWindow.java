@@ -80,8 +80,8 @@ public class AreaCaptureWindow extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
 					if (listener != null) {
-						selectedArea.x -= maxArea.x;
-						selectedArea.y -= maxArea.y;
+//						selectedArea.x -= maxArea.x;
+//						selectedArea.y -= maxArea.y;
 						listener.onCapture(selectedArea);
 					}
 					dispose();
