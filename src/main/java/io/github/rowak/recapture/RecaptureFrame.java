@@ -38,7 +38,7 @@ public class RecaptureFrame extends JFrame {
 	private Point mouseLoc;
 	private MouseCaptureListener mouseCaptureListener;
 	
-	public RecaptureFrame() throws NativeHookException, AWTException {
+	public RecaptureFrame(LauncherInfo launcherInfo) throws NativeHookException, AWTException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, DISPLAY_RESOLUTION.width, DISPLAY_RESOLUTION.height);
 		robot = new Robot();
@@ -75,7 +75,7 @@ public class RecaptureFrame extends JFrame {
 		double scale = getScale();
 		int scaledMouseX = (int)((mouseLoc.x - CAPTURE_AREA.x + X_OFFSET)*scale) + x_off - 10;
 		int scaledMouseY = (int)((mouseLoc.y - CAPTURE_AREA.y + Y_OFFSET)*scale) + y_off - 5;
-		Image scaledCursor = scaleImageFactor(cursorImage, getScale(), Image.SCALE_REPLICATE);
+		Image scaledCursor = scaleImageFactor(cursorImage, scale, Image.SCALE_REPLICATE);
 		buffGraphics.drawImage(scaledCursor, scaledMouseX, scaledMouseY, this);
 		g.drawImage(buff, 0, 0, this);
 	}

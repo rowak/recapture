@@ -4,9 +4,8 @@ import javax.swing.JFrame;
 
 public class App extends JFrame {
 	public static void main(String[] args) throws Exception {
-		RecaptureFrame frame = new RecaptureFrame();
-		frame.setUndecorated(true);
-		frame.setVisible(true);
+		Launcher launcher = new Launcher();
+		launcher.setVisible(true);
 	}
 }
 
