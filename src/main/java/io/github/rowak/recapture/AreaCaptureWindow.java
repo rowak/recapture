@@ -1,28 +1,21 @@
 package io.github.rowak.recapture;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 public class AreaCaptureWindow extends JFrame {
@@ -32,9 +25,15 @@ public class AreaCaptureWindow extends JFrame {
 	private TransparentPanel tp;
 	private AreaCaptureListener listener;
 	
-	public AreaCaptureWindow(int monitor) {
+	public AreaCaptureWindow(int monitor, Rectangle area) {
 		this.monitor = monitor;
-		selectedArea = getDefaultSelectionArea();
+		if (area == null) {
+			selectedArea = getDefaultSelectionArea();
+		}
+		else {
+			selectedArea = new Rectangle();
+			selectedArea.setBounds(area);
+		}
 		initUI();
 	}
 	
@@ -78,14 +77,10 @@ public class AreaCaptureWindow extends JFrame {
         
         addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
-					if (listener != null) {
-//						selectedArea.x -= maxArea.x;
-//						selectedArea.y -= maxArea.y;
-						listener.onCapture(selectedArea);
-					}
-					dispose();
+				if (listener != null) {
+					listener.onCapture(selectedArea);
 				}
+				dispose();
 			}
 		});
 

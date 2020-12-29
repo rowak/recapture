@@ -22,16 +22,9 @@ import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseMotionListener;
 
 public class RecaptureFrame extends JFrame {
-//	private final int X_OFFSET = 1920; // horizontal offset for extra monitors
-//	private final int Y_OFFSET = 0; // vertical offset for extra monitors
-//	private final Rectangle CAPTURE_AREA = new Rectangle(0+X_OFFSET, 0+Y_OFFSET, 1920, 1080);
-//	private final Rectangle CAPTURE_AREA = new Rectangle(320+X_OFFSET, 189+Y_OFFSET, 1280, 720);
-//	private final Dimension DISPLAY_RESOLUTION = new Dimension(1920, 1200);
-//	private final Dimension SCALED_RESOLUTION = getScaledResolution();
-//	private final long INTERVAL = 2;
-	
 	private int quality;
 	private long interval;
+	private boolean emulateMouse;
 	private Timer timer;
 	private Robot robot;
 	private BufferedImage img;
@@ -48,6 +41,7 @@ public class RecaptureFrame extends JFrame {
 		displayBounds = launcherInfo.getDisplayBounds();
 		quality = launcherInfo.getQuality();
 		interval = launcherInfo.getFrequency();
+		emulateMouse = launcherInfo.isMouseEmulated();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, displayBounds.width, displayBounds.height);
 		scaledResolution = getScaledResolution();
@@ -79,47 +73,19 @@ public class RecaptureFrame extends JFrame {
 		buffGraphics.fillRect(0, 0, x_off, displayBounds.height); // left bar
 		buffGraphics.fillRect((displayBounds.width-x_off), 0, x_off, displayBounds.height); // right bar
 		Image scaledImage = scaleImageFit(img, quality);
-//		Image scaledImage = scaleImageFit(img);
 		buffGraphics.drawImage(scaledImage, x_off, y_off, this);
-		double scale = getScale();
-//		int scaledMouseX = (int)((mouseLoc.x - CAPTURE_AREA.x + X_OFFSET)*scale) + x_off - 10;
-//		int scaledMouseY = (int)((mouseLoc.y - CAPTURE_AREA.y + Y_OFFSET)*scale) + y_off - 5;
-		int scaledMouseX = (int)((mouseLoc.x - captureArea.x + displayBounds.width)*scale) + x_off - 10;
-		int scaledMouseY = (int)((mouseLoc.y - captureArea.y)*scale) + y_off - 5;
-		BufferedImage cursorImage = NativeCursor.getCursorImage();
-		Image scaledCursor = scaleImageFactor(cursorImage, scale, quality);
-		buffGraphics.drawImage(scaledCursor, scaledMouseX, scaledMouseY, this);
+		if (emulateMouse && mouseLoc != null) {
+			double scale = getScale();
+	//		int scaledMouseX = (int)((mouseLoc.x - CAPTURE_AREA.x + X_OFFSET)*scale) + x_off - 10;
+	//		int scaledMouseY = (int)((mouseLoc.y - CAPTURE_AREA.y + Y_OFFSET)*scale) + y_off - 5;
+			int scaledMouseX = (int)((mouseLoc.x - captureArea.x + displayBounds.width)*scale) + x_off - 10;
+			int scaledMouseY = (int)((mouseLoc.y - captureArea.y)*scale) + y_off - 5;
+			BufferedImage cursorImage = NativeCursor.getCursorImage();
+			Image scaledCursor = scaleImageFactor(cursorImage, scale, quality);
+			buffGraphics.drawImage(scaledCursor, scaledMouseX, scaledMouseY, this);
+		}
 		g.drawImage(buff, 0, 0, this);
 	}
-	
-//	private Image scaleImageFit(BufferedImage sbi, int imageType, int dWidth, int dHeight, double fWidth, double fHeight) {
-////		BufferedImage dbi = null;
-////		if (sbi != null) {
-////			dbi = new BufferedImage(dWidth, 1080, imageType);
-//////			Graphics2D g = dbi.createGraphics();
-//////			double scale = (fWidth <= fHeight) ? fWidth : fHeight;
-//////			AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
-////			ResampleOp rsp = new ResampleOp(dWidth, 1080);
-////			rsp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
-//////			rsp.setFilter(ResampleFilters.);
-////			rsp.filter(sbi, dbi);
-//////			g.drawRenderedImage(sbi, at);
-////		}
-////		return dbi;
-//		return sbi.getScaledInstance(dWidth, 1080, Image.SCALE_REPLICATE);
-//	}
-	
-//	private Image scaleImageFit(BufferedImage img) {
-//		double scaleFactor = getScale();
-//		int width = (int)(img.getWidth()*scaleFactor);
-//		int height = (int)(img.getHeight()*scaleFactor);
-//		BufferedImage dbi = null;
-//		dbi = new BufferedImage(width, height, img.getType());
-//		Graphics2D g = dbi.createGraphics();
-//		AffineTransform at = AffineTransform.getScaleInstance(scaleFactor, scaleFactor);
-//		g.drawRenderedImage(img, at);
-//		return dbi;
-//	}
 	
 	private Image scaleImageFit(BufferedImage img, int scaleType) {
 		double scaleFactor = getScale();
@@ -131,18 +97,6 @@ public class RecaptureFrame extends JFrame {
 	private Image scaleImageFactor(BufferedImage img, double factor, int scaleType) {
 		return img.getScaledInstance((int)(img.getWidth()*factor), (int)(img.getHeight()*factor), scaleType);
 	}
-	
-//	private BufferedImage scaleImageFit(BufferedImage sbi, int imageType, int dWidth, int dHeight, double fWidth, double fHeight) {
-//		BufferedImage dbi = null;
-//		if (sbi != null) {
-//			dbi = new BufferedImage(dWidth, dHeight, imageType);
-//			Graphics2D g = dbi.createGraphics();
-//			double scale = (fWidth <= fHeight) ? fWidth : fHeight;
-//			AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
-//			g.drawRenderedImage(sbi, at);
-//		}
-//		return dbi;
-//	}
 	
 	private Dimension getScaledResolution() {
 		double scale = getScale();
